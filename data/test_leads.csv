@@ -1,0 +1,7 @@
+name,company,need,budget,timing,source
+Julien Martin,NovaRetail,"Developpement application web de gestion stock + API",18000 euros,2 mois,formulaire
+Sonia Dupont,GreenLog,"Migration cloud et mise en place CI/CD DevOps",25000 euros,urgent,email
+Marc Petit,EventPro,"Recherche traiteur et decoration pour salon",7000 euros,1 mois,linkedin
+Laura Benali,MedData,"Maintenance informatique et support utilisateurs",12000 euros,Q2,formulaire
+,,,
+Thomas Leroy,BuildSys,"Creation site web vitrine",,3 semaines,email

@@ -1,0 +1,9 @@
+Lead 1 : Bonjour, je suis Julien Martin chez NovaRetail.
+Nous cherchons une entreprise informatique pour développer une application web de gestion de stock avec API.
+Budget estimé: 18000 euros.
+Délai: démarrage urgent, livraison sous 2 mois.
+Source: formulaire site.
+
+Lead 2 : Bonjour, nous cherchons un traiteur pour un mariage de 120 personnes avec menu vegan.
+Budget: 6000 euros.
+Délai: juin.

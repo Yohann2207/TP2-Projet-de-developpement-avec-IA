@@ -26,7 +26,8 @@ def _ingest_text(settings, raw_text: str) -> tuple[int | None, str]:
     """
 
     extracted = extract_lead(settings, raw_text)
-    is_it, scope_reason = evaluate_it_scope(extracted)
+    # Le filtre combine extraction + texte brut pour eviter les faux positifs LLM.
+    is_it, scope_reason = evaluate_it_scope(extracted, raw_text)
     if not is_it:
         return None, scope_reason
 

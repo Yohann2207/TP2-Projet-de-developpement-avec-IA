@@ -1,4 +1,5 @@
-﻿from typing import Any
+﻿import re
+from typing import Any
 
 
 # Liste de mots-cles utilises pour verifier l'alignement avec le perimetre IT.
@@ -22,14 +23,55 @@ IT_KEYWORDS = [
     "maintenance informatique",
 ]
 
+NON_IT_KEYWORDS = [
+    "traiteur",
+    "mariage",
+    "restauration",
+    "menu",
+    "photographe",
+    "fleuriste",
+    "coiffure",
+    "esthetique",
+    "voyage",
+    "hotel",
+    "immobilier",
+]
 
-def evaluate_it_scope(extracted: dict[str, Any]) -> tuple[bool, str]:
-    """Valide si le besoin du lead est dans le perimetre metier IT."""
+
+def _contains_keyword(text: str, keyword: str) -> bool:
+    """Detecte un mot-cle dans un texte avec une logique robuste.
+
+    - Mot court (<=3): borne de mot pour eviter les faux positifs.
+    - Mot long / expression: recherche simple en sous-chaine.
+    """
+
+    if len(keyword) <= 3:
+        pattern = rf"\b{re.escape(keyword)}\b"
+        return re.search(pattern, text) is not None
+    return keyword in text
+
+
+def evaluate_it_scope(extracted: dict[str, Any], raw_text: str = "") -> tuple[bool, str]:
+    """Valide si le besoin du lead est dans le perimetre metier IT.
+
+    Important: on combine les infos extraites + le texte brut pour reduire
+    les faux positifs quand le modele reformule mal le besoin.
+    """
 
     need = (extracted.get("need") or "").strip().lower()
+    raw = (raw_text or "").strip().lower()
+
+    raw_has_it = any(_contains_keyword(raw, keyword) for keyword in IT_KEYWORDS)
+    raw_has_non_it = any(_contains_keyword(raw, keyword) for keyword in NON_IT_KEYWORDS)
+
+    # Regle anti faux-positif: si le texte brut contient des indices non IT
+    # et aucun signal IT, on bloque directement.
+    if raw_has_non_it and not raw_has_it:
+        return False, "Lead ignore: besoin hors perimetre IT (detecte dans le texte brut)."
+
     if not need:
         return False, "Lead ignore: besoin absent (impossible de verifier le perimetre IT)."
-    if any(keyword in need for keyword in IT_KEYWORDS):
+    if any(_contains_keyword(need, keyword) for keyword in IT_KEYWORDS):
         return True, "Lead IT detecte."
     return False, "Lead ignore: besoin hors perimetre IT."
 
@@ -53,7 +95,7 @@ def score_lead(extracted: dict[str, Any]) -> tuple[int, str]:
         reasons.append("besoin non precise (+0)")
 
     # 2) Adequation metier (IT).
-    if need and any(keyword in need_lower for keyword in IT_KEYWORDS):
+    if need and any(_contains_keyword(need_lower, keyword) for keyword in IT_KEYWORDS):
         score += 15
         reasons.append("besoin aligne services IT (+15)")
     elif need:

@@ -4,8 +4,8 @@
 - US-01: Validee (code implemente)
 - US-02: Validee (code implemente)
 - US-03: Validee (code implemente)
-- US-04: En cours
-- US-05: En attente
+- US-04: Validee (code implemente)
+- US-05: Validee (code implemente)
 
 ## Backlog
 

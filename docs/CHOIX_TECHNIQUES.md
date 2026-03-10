@@ -4,7 +4,7 @@
 - Langage: Python (lisible et rapide pour MVP).
 - Interface: Streamlit (developpement rapide).
 - Base de donnees: PostgreSQL.
-- IA: En réflexion
+- IA: Mistral AI
 
 ## Pourquoi PostgreSQL
 - Contrainte explicite du document de cadrage.

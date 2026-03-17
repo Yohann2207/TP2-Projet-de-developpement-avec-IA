@@ -138,6 +138,21 @@ def _call_gemini(settings: Settings, instruction: str, user_text: str, temperatu
     return output
 
 
+def _normalize_extraction_payload(payload: Any) -> dict[str, Any]:
+    """Normalise la sortie JSON du modele vers un dictionnaire.
+
+    Certains modeles renvoient:
+    - un objet JSON (cas attendu)
+    - une liste contenant un objet (ex: [{...}])
+    """
+
+    if isinstance(payload, dict):
+        return payload
+    if isinstance(payload, list) and payload and isinstance(payload[0], dict):
+        return payload[0]
+    raise ValueError(f"Format JSON non supporte pour extraction: {type(payload).__name__}")
+
+
 def _parse_json_output(raw: str) -> dict[str, Any]:
     """Parse un JSON meme si le modele renvoie des fences markdown."""
 
@@ -153,12 +168,14 @@ def _parse_json_output(raw: str) -> dict[str, Any]:
             cleaned = cleaned[4:].strip()
 
     try:
-        return json.loads(cleaned)
+        parsed = json.loads(cleaned)
+        return _normalize_extraction_payload(parsed)
     except json.JSONDecodeError:
         start = cleaned.find("{")
         end = cleaned.rfind("}")
         if start != -1 and end != -1 and end > start:
-            return json.loads(cleaned[start : end + 1])
+            parsed = json.loads(cleaned[start : end + 1])
+            return _normalize_extraction_payload(parsed)
         raise
 
 

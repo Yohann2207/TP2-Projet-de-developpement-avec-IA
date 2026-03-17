@@ -26,6 +26,14 @@ MVP qui importe des leads, extrait les informations cles avec IA, calcule un sco
 3. Copier `.env.example` vers `.env` puis completer les variables.
 4. Verifier PostgreSQL (base `leads_db` accessible).
 
+### Si vous n'avez pas PostgreSQL installe (option Docker rapide)
+Vous pouvez lancer un conteneur local:
+- `docker run --name tp2-postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=leads_db -p 5430:5432 -d postgres:17`
+
+Pour verifier:
+- `docker ps`
+- `docker exec -it tp2-postgres psql -U postgres -d leads_db -c "select 1;"`
+
 ### Option recommandee (PostgreSQL avec Docker)
 Exemple si ton conteneur mappe `5430:5432`:
 - `PGHOST=localhost`
@@ -38,7 +46,7 @@ Exemple si ton conteneur mappe `5430:5432`:
 Depuis le dossier projet:
 - `streamlit run src/app.py`
 
-## Parcours utilisateur (demo)
+## Parcours de demonstration
 1. Importer un lead texte ou un CSV.
 2. Verifier le resultat d'import (importes/ignores/erreurs).
 3. Ouvrir la section **Detail scoring** pour voir la justification et le controle de reproductibilite.
@@ -71,7 +79,7 @@ Depuis le dossier projet:
 - Choix techniques: `docs/CHOIX_TECHNIQUES.md`
 - User stories: `docs/USER_STORIES.md`
 - Tests cas limites: `docs/TESTS_CAS_LIMITES.md`
-- Journal: `JOURNAL.md`
+- Journal: `docs/JOURNAL.md`
 
 ## Limitations connues (MVP)
 - Pas d'integration CRM.
